@@ -4,9 +4,11 @@ import { CONFIG_FILE, loadConfig } from "./config.ts";
 import { checkCommand } from "./guard.ts";
 import type { Exec } from "./types.ts";
 import { WorkStore } from "./workitems.ts";
+import { registerSubagentChild, registerSubagentParent } from "./subagent/extension.ts";
 
 export default function superagent(pi: ExtensionAPI) {
   const isWorker = process.env.SUPERAGENT_WORKER === "1";
+  const isSubagent = !!process.env.PI_SUBAGENT_ID;
   let agent: Superagent | undefined;
   let ui: ExtensionContext["ui"] | undefined;
 
@@ -19,7 +21,10 @@ export default function superagent(pi: ExtensionAPI) {
     }
   });
 
+  if (isSubagent) { registerSubagentChild(pi); return; }
   if (isWorker) return;
+
+  registerSubagentParent(pi);
 
   const exec: Exec = async (cmd, args, opts) => {
     const r = await pi.exec(cmd, args, opts);

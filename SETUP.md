@@ -2,6 +2,13 @@
 
 > If you are a coding agent reading this: ask the operator one short question at a time, show the full plan once, then do it. **Never ask for a secret in chat** — steps that need the operator's hands go into one message with exact terminal commands.
 
+## Subagent mode only (no GitHub setup)
+```bash
+pi install git:github.com/aicodewith-team/pi-superagent
+pi        # then ask: "spawn a subagent to …"  — or type /subagent spawn <task>
+```
+Optional: `export PI_SUBAGENT_MAX=4` (concurrency cap). Logs: `.pi/subagents/<id>/` (add `.pi/subagents/` to `.git/info/exclude`). Subagents load only this extension (`-ne -e`), use your default model unless `model` is given, and run with the same guard. Sections 0-4 below are only for the GitHub mode.
+
 ## 0. Prerequisites
 - Node.js ≥ 20, git, [pi](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent) (`npm i -g @earendil-works/pi-coding-agent`) with a working model (`pi` → `/login` or an API key).
 - [GitHub CLI](https://cli.github.com/) `gh`.
